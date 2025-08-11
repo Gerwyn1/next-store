@@ -8,7 +8,6 @@ function Logo() {
     <Button
       size="icon"
       asChild
-      className="rounded bg-black text-white hover:bg-white hover:text-black"
     >
       <Link href="/">
         <VscCode className="w-6 h-6 " />
