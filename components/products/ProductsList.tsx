@@ -1,4 +1,4 @@
-function ProductsList() {
+function ProductsList({products}) {
   return (
     <div>ProductsList</div>
   )
