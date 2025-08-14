@@ -16,7 +16,7 @@ type SubmitButtonProps = {
   size?: btnSize;
 };
 
-function Buttons({
+function SubmitButton({
   className = "",
   text = "submit",
   size = "lg",
@@ -40,4 +40,4 @@ function Buttons({
     </Button>
   );
 }
-export default Buttons;
+export default SubmitButton;

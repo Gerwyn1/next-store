@@ -1,6 +1,8 @@
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { Prisma } from "@prisma/client";
 
+// Prisma.ProductScalarFieldEnum.  (access model properties)
 const name = "price";
 type FormInputNumberProps = {
   defaultValue?: number;
