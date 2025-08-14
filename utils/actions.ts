@@ -3,7 +3,7 @@
 import db from "@/utils/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { productSchema } from "./schemas";
+import { productSchema, validateWithZodSchema } from "./schemas";
 
 const getAuthUser = async () => {
   const user = await currentUser();
@@ -59,7 +59,25 @@ export const createProductAction = async (
 
   try {
     const rawData = Object.fromEntries(formData);
-    const validatedFields = productSchema.parse(rawData);
+
+    // (generic error message)
+    // const validatedFields = productSchema.parse(rawData);
+
+    // (custom error message)
+    const validatedFields = validateWithZodSchema(productSchema, rawData);
+    await db.product.create({
+      data: {
+        ...validatedFields,
+        image: "/images/product-3.jpg",
+        clerkId: user.id,
+      },
+    });
+
+    // const validatedFields = productSchema.safeParse(rawData);
+    // if (!validatedFields.success) {
+    //   const errors = validatedFields.error.errors.map((error) => error.message);
+    //   throw new Error(errors.join(","));
+    // }
 
     // const name = formData.get("name") as string;
     // const company = formData.get("company") as string;
