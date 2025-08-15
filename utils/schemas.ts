@@ -40,7 +40,7 @@ function validateImageFile() {
     }, "File size must be less than 1MB")
     .refine((file) => {
       return (
-        !File || acceptedFileTypes.some((type) => file.type.startsWith(type))
+        !file || acceptedFileTypes.some((type) => file.type.startsWith(type))
       );
     }, "File must be an image");
 }
