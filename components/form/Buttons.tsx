@@ -8,6 +8,8 @@ import { SignInButton } from "@clerk/nextjs";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { LuTrash2, LuSquare } from "react-icons/lu";
 
+import { CiEdit } from "react-icons/ci";
+
 type btnSize = "default" | "lg" | "sm";
 
 type SubmitButtonProps = {
@@ -49,9 +51,9 @@ export const IconButton = ({ actionType }: { actionType: actionType }) => {
   const renderIcon = () => {
     switch (actionType) {
       case "edit":
-        return <LuSquare className="text-gray-500 hover:text-gray-700" />;
+        return <CiEdit />;
       case "delete":
-        return <LuTrash2 className="text-gray-500 hover:text-gray-700" />;
+        return <LuTrash2 />;
       default:
         const never: never = actionType;
         throw new Error(`Invalid action type: ${never}`);
