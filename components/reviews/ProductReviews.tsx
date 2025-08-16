@@ -1,6 +1,4 @@
-function ProductReviews() {
-  return (
-    <div>ProductReviews</div>
-  )
+function ProductReviews({ productId }: { productId: string }) {
+  return <div>ProductReviews</div>;
 }
-export default ProductReviews
+export default ProductReviews;

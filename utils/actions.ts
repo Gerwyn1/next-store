@@ -273,7 +273,7 @@ export const fetchUserFavorites = async () => {
   return favorites;
 };
 
-const createReviewAction = async (prevState: any, formData: FormData) => {
+export const createReviewAction = async (prevState: any, formData: FormData) => {
   try {
   } catch (error) {}
 
