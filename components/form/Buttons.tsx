@@ -72,7 +72,7 @@ export const IconButton = ({ actionType }: { actionType: actionType }) => {
   );
 };
 
-const CardSignInButton = () => {
+export const CardSignInButton = () => {
   return (
     <SignInButton mode="modal">
       <Button
@@ -88,7 +88,7 @@ const CardSignInButton = () => {
   );
 };
 
-const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
+export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
   const { pending } = useFormStatus();
   return (
     <SignInButton mode="modal">
