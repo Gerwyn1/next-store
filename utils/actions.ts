@@ -272,3 +272,30 @@ export const fetchUserFavorites = async () => {
   });
   return favorites;
 };
+
+const createReviewAction = async (prevState: any, formData: FormData) => {
+  try {
+  } catch (error) {}
+
+  return { message: "review submitted successfully" };
+};
+
+export const fetchProductReviews = async () => {
+  // return db.review.findMany({});
+};
+
+export const fetchProductReviewByUser = async () => {
+  // return db.review.findMany({});
+};
+
+export const deleteReviewAction = async () => {
+  // return db.review.findMany({});
+};
+
+export const findExistingReview = async () => {
+  // return db.review.findMany({});
+};
+
+export const fetchProductRating = async () => {
+  // return db.review.findMany({});
+};
