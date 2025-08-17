@@ -3,7 +3,12 @@
 import db from "@/utils/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { imageSchema, productSchema, validateWithZodSchema } from "./schemas";
+import {
+  imageSchema,
+  productSchema,
+  reviewSchema,
+  validateWithZodSchema,
+} from "./schemas";
 import { deleteImage, uploadImage } from "./supabase";
 import { revalidatePath } from "next/cache";
 
@@ -273,11 +278,27 @@ export const fetchUserFavorites = async () => {
   return favorites;
 };
 
-export const createReviewAction = async (prevState: any, formData: FormData) => {
+export const createReviewAction = async (
+  prevState: any,
+  formData: FormData
+) => {
+  const user = await getAuthUser();
   try {
-  } catch (error) {}
+    const rawData = Object.fromEntries(formData);
+    const validatedFields = validateWithZodSchema(reviewSchema, rawData);
+    await db.review.create({
+      data: {
+        ...validatedFields,
+        clerkId: user.id,
+      },
+    });
 
-  return { message: "review submitted successfully" };
+    revalidatePath(`/products/${validatedFields.productId}`);
+
+    return { message: "review submitted successfully" };
+  } catch (error) {
+    return renderError(error);
+  }
 };
 
 export const fetchProductReviews = async () => {

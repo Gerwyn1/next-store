@@ -12,7 +12,6 @@ import { useUser } from "@clerk/nextjs";
 function SubmitReview({ productId }: { productId: string }) {
   const [isReviewFormVisible, setIsReviewFormVisible] = useState(false);
   const { user } = useUser();
-
   return (
     <div>
       <Button
@@ -29,9 +28,11 @@ function SubmitReview({ productId }: { productId: string }) {
             <input
               type="hidden"
               name="authorName"
-              value={user?.firstName || "user"}
+              value={
+                user?.username || user?.fullName || user?.firstName || "user"
+              }
             />
-            <input type="hidden" name="authorImage" value={user?.imageUrl} />
+            <input type="hidden" name="authorImageUrl" value={user?.imageUrl} />
             <RatingInput name="rating" />
             <TextAreaInput
               name="comment"
