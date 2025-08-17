@@ -332,11 +332,42 @@ export const fetchProductRating = async (productId: string) => {
   };
 };
 
-export const fetchProductReviewByUser = async () => {
-  // return db.review.findMany({});
+export const fetchProductReviewsByUser = async (productId: string) => {
+  const user = await getAuthUser();
+  const reviews = db.review.findMany({
+    where: {
+      clerkId: user.id,
+    },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      product: {
+        select: {
+          image: true,
+          name: true,
+        },
+      },
+    },
+  });
+  return reviews;
 };
 
-export const deleteReviewAction = async () => {
+export const deleteReviewAction = async (prevState: { reviewId: string }) => {
+  const { reviewId } = prevState;
+  const user = await getAuthUser();
+  try {
+    await db.review.delete({
+      where: {
+        id: reviewId,
+        clerkId: user.id,
+      },
+    });
+    revalidatePath("/reviews");
+    return { message: "review deleted successfully" };
+  } catch (error) {
+    return renderError(error);
+  }
   // return db.review.findMany({});
 };
 
