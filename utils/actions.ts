@@ -393,16 +393,35 @@ export const fetchCartItems = async () => {
   return cart?.numItemsInCart || 0;
 };
 
-const fetchProduct = async () => {};
+const fetchProduct = async (productId: string) => {
+  const product = await db.product.findUnique({
+    where: {
+      id: productId,
+    },
+  });
+  if (!product) {
+    throw new Error("Product not found");
+  }
+  return product;
+};
 
-export const fetchOrCreateCart = async () => {};
+export const fetchOrCreateCart = async ({ userId }: { userId: string }) => {};
 
 const updateOrCreateCartItem = async () => {};
 
 export const updateCart = async () => {};
 
-export const addToCartAction = async (prevState : any, formData: FormData) => {
-  return {message: "product added to the cart"}
+export const addToCartAction = async (prevState: any, formData: FormData) => {
+  const user = await getAuthUser();
+  try {
+    const productId = formData.get("productId") as string;
+    const amount = Number(formData.get("amount"));
+    const product = await fetchProduct(productId);
+    const cart = await fetchOrCreateCart({ userId: user.id });
+  } catch (error) {
+    return renderError(error);
+  }
+  redirect("/cart");
 };
 
 export const removeCartItemAction = async () => {};
