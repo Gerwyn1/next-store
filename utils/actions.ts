@@ -332,7 +332,7 @@ export const fetchProductRating = async (productId: string) => {
   };
 };
 
-export const fetchProductReviewsByUser = async (productId: string) => {
+export const fetchProductReviewsByUser = async () => {
   const user = await getAuthUser();
   const reviews = db.review.findMany({
     where: {
