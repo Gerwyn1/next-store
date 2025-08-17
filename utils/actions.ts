@@ -301,8 +301,16 @@ export const createReviewAction = async (
   }
 };
 
-export const fetchProductReviews = async () => {
-  // return db.review.findMany({});
+export const fetchProductReviews = async (productId: string) => {
+  const reviews = db.review.findMany({
+    where: {
+      productId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return reviews;
 };
 
 export const fetchProductReviewByUser = async () => {
