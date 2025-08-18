@@ -495,6 +495,7 @@ export const updateCart = async (cart: Cart) => {
     numItemsInCart += item.amount;
     cartTotal += item.amount * item.product.price;
   }
+
   const tax = cart.taxRate * cartTotal;
   const shipping = cartTotal ? cart.shipping : 0;
   const orderTotal = cartTotal + tax + shipping;
@@ -532,3 +533,7 @@ export const addToCartAction = async (prevState: any, formData: FormData) => {
 export const removeCartItemAction = async () => {};
 
 export const updateCartItemAction = async () => {};
+
+export const createOrderAction = async (prevState: any, formData: FormData) => {
+  return { message: "order created" };
+};
