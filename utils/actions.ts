@@ -11,6 +11,7 @@ import {
 } from "./schemas";
 import { deleteImage, uploadImage } from "./supabase";
 import { revalidatePath } from "next/cache";
+import { Cart } from "@prisma/client";
 
 const getAuthUser = async () => {
   const user = await currentUser();
@@ -442,17 +443,86 @@ export const fetchOrCreateCart = async ({
   return cart;
 };
 
-const updateOrCreateCartItem = async () => {};
+const updateOrCreateCartItem = async ({
+  productId,
+  cartId,
+  amount,
+}: {
+  productId: string;
+  cartId: string;
+  amount: number;
+}) => {
+  let cartItem = await db.cartItem.findFirst({
+    where: {
+      productId,
+      cartId,
+    },
+  });
+  if (cartItem) {
+    cartItem = await db.cartItem.update({
+      where: {
+        id: cartItem.id,
+      },
+      data: {
+        amount: cartItem.amount + amount,
+      },
+    });
+  } else {
+    await db.cartItem.create({
+      data: {
+        productId,
+        cartId,
+        amount,
+      },
+    });
+  }
+};
 
-export const updateCart = async () => {};
+export const updateCart = async (cart: Cart) => {
+  const cartItems = await db.cartItem.findMany({
+    where: {
+      cartId: cart.id,
+    },
+    include: {
+      product: true,
+    },
+  });
+
+  let numItemsInCart = 0;
+  let cartTotal = 0;
+
+  for (const item of cartItems) {
+    numItemsInCart += item.amount;
+    cartTotal += item.amount * item.product.price;
+  }
+  const tax = cart.taxRate * cartTotal;
+  const shipping = cartTotal ? cart.shipping : 0;
+  const orderTotal = cartTotal + tax + shipping;
+
+  const currentCart = await db.cart.update({
+    where: {
+      id: cart.id,
+    },
+    data: {
+      numItemsInCart,
+      cartTotal,
+      tax,
+      orderTotal,
+    },
+    include: includeProductClause,
+  });
+  return currentCart;
+};
 
 export const addToCartAction = async (prevState: any, formData: FormData) => {
   const user = await getAuthUser();
   try {
     const productId = formData.get("productId") as string;
     const amount = Number(formData.get("amount"));
-    const product = await fetchProduct(productId);
+    await fetchProduct(productId);
     const cart = await fetchOrCreateCart({ userId: user.id });
+    await updateOrCreateCartItem({ productId, cartId: cart.id, amount });
+    await updateCart(cart);
   } catch (error) {
     return renderError(error);
   }
