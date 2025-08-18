@@ -29,4 +29,5 @@ async function CartPage() {
     </>
   );
 }
+
 export default CartPage;
