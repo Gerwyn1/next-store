@@ -35,19 +35,41 @@ export const POST = async (req: NextRequest) => {
     });
   }
 
-  const line_items = cart.cartItems.map((cartItem) => {
-    return {
-      quantity: cartItem.amount,
+  const line_items = [
+    ...cart.cartItems.map((cartItem) => {
+      return {
+        quantity: cartItem.amount,
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: cartItem.product.name,
+            images: [cartItem.product.image],
+          },
+          unit_amount: cartItem.product.price * 100, // price in cents
+        },
+      };
+    }),
+    {
+      quantity: 1,
       price_data: {
         currency: "usd",
         product_data: {
-          name: cartItem.product.name,
-          images: [cartItem.product.image],
+          name: "Tax",
         },
-        unit_amount: cartItem.product.price * 100, // price in cents
+        unit_amount: cart.tax * 100, // price in cents
       },
-    };
-  });
+    },
+    {
+      quantity: 1,
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: "Shipping",
+        },
+        unit_amount: cart.shipping * 100, // price in cents
+      },
+    },
+  ];
 
   try {
     const session = await stripe.checkout.sessions.create({
