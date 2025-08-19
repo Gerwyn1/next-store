@@ -36,4 +36,4 @@ function CheckoutPage() {
     </div>
   );
 }
-export default page;
+export default CheckoutPage;
