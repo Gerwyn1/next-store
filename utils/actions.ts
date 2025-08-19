@@ -625,11 +625,6 @@ export const createOrderAction = async (prevState: any, formData: FormData) => {
     });
 
     orderId = order.id;
-    // await db.cart.delete({
-    //   where: {
-    //     id: cart.id,
-    //   },
-    // });
   } catch (error) {
     return renderError(error);
   }
